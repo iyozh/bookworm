@@ -9,6 +9,7 @@ djangorestframework = "*"
 psycopg2-binary = "*"
 
 [dev-packages]
+black = "==21.11b1"
 
 [requires]
 python_version = "3.8"
