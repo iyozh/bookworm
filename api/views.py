@@ -1,7 +1,10 @@
+from rest_framework import permissions
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-
+from django.contrib.auth import get_user_model
 from api.models import Shop
 from api.serializers import ShopSerializer
+
+User = get_user_model()
 
 
 class ShopListView(ListCreateAPIView):
@@ -9,6 +12,7 @@ class ShopListView(ListCreateAPIView):
 
     serializer_class = ShopSerializer
     queryset = Shop.objects.all()
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 class ShopRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
@@ -17,3 +21,4 @@ class ShopRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 
     serializer_class = ShopSerializer
     queryset = Shop.objects.all()
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
