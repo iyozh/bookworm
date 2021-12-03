@@ -41,6 +41,7 @@ class UserSerializer(ModelSerializer):
 
     def validate(self, attrs):
         """This method validates if passwords are equal. Otherwise method throws ValidationError"""
+
         if attrs["password"] != attrs["password2"]:
             raise serializers.ValidationError(
                 {"password": "Password fields didn't match."}
@@ -51,6 +52,7 @@ class UserSerializer(ModelSerializer):
     def create(self, validated_data):
         """Create method creates user instance and sets the user’s password to the given raw string, taking care of
         the password hashing. Saves and return user instance"""
+
         user = User.objects.create(
             username=validated_data["username"],
         )
