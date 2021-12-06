@@ -23,7 +23,7 @@ class ShopSerializer(ModelSerializer):
 
 
 class UserSerializer(ModelSerializer):
-    """UserSerializer transforms shop data into json format
+    """UserSerializer transforms user data into json format
     Serializable fields: username, password, password2(confirm field)"""
 
     password = serializers.CharField(

@@ -13,19 +13,8 @@ MacOS example:
 cd bookworm
 nano .env.dev
 ```
-Configure `.env.dev` with the following settings
+Configure `.env.dev` file. Example of the settings is presented in `.env.dev.example`
 
-```sh
-DEBUG=1
-SECRET_KEY=your_secret_key
-DJANGO_ALLOWED_HOSTS='localhost 127.0.0.1 [::1]'
-ENGINE=django.db.backends.postgresql
-DATABASE=postgres
-USER=postgres
-PASSWORD=postgres
-HOST=db
-PORT=5432
-```
 ## Docker-compose
 
 Build image and run the docker-container
