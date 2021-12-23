@@ -13,6 +13,8 @@ urlpatterns = [
         views.ShopRetrieveUpdateDestroyView.as_view(),
         name="detail_shop",
     ),
+    path("books/", views.BooksListView.as_view(), name="books"),
+    path("shops/<int:pk>/books", views.BooksForCurrentShopListView.as_view(), name="shop_books"),
     # AUTH
     path("signup/", views.Register.as_view(), name="signup"),
     path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),

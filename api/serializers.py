@@ -3,7 +3,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
-from api.models import Shop
+from api.models import Shop, Book
 
 User = get_user_model()
 
@@ -19,6 +19,27 @@ class ShopSerializer(ModelSerializer):
         fields = [
             "name",
             "creator",
+        ]
+
+
+class BookSerializer(ModelSerializer):
+    """BookSerializer transforms book data into json format
+    Serializable fields: title, author, description, published, genre, pages, amount_limit, time_limit, shop"""
+
+    shop = serializers.ReadOnlyField(source="shop.name")
+
+    class Meta:
+        model = Book
+        fields = [
+            "title",
+            "author",
+            "description",
+            "published",
+            "genre",
+            "pages",
+            "amount_limit",
+            "time_limit",
+            "shop"
         ]
 
 
@@ -40,7 +61,7 @@ class UserSerializer(ModelSerializer):
         ]
 
     def validate(self, attrs):
-        """This method validates if passwords are equal. Otherwise method throws ValidationError"""
+        """This method validates if passwords are equal. Otherwise, method throws ValidationError"""
 
         if attrs["password"] != attrs["password2"]:
             raise serializers.ValidationError(
