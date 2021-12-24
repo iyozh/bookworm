@@ -39,8 +39,15 @@ class BookSerializer(ModelSerializer):
             "pages",
             "amount_limit",
             "time_limit",
-            "shop"
+            "shop",
         ]
+
+    def create(self, validated_data):
+        """This method prevents creating the duplicated book instance in one shop """
+
+        if Book.objects.filter(shop=validated_data.get('shop_id'), title=validated_data.get('title')).exists():
+            raise serializers.ValidationError({"error": "Book with such title already exists in this shop"})
+        return super().create(validated_data)
 
 
 class UserSerializer(ModelSerializer):
