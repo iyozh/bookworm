@@ -1,17 +1,14 @@
-from django.http import JsonResponse
-from django.shortcuts import redirect
 from rest_framework import permissions
 from rest_framework.generics import (
     ListCreateAPIView,
     RetrieveUpdateDestroyAPIView,
     CreateAPIView,
+    ListAPIView,
 )
 from django.contrib.auth import get_user_model
-from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
-from api.models import Shop
-from api.permissions import IsOwnerOrReadOnly
-from api.serializers import ShopSerializer, UserSerializer
+from api.models import Shop, Book
+from api.permissions import IsOwnerOrReadOnly, IsOwnerOfShopOrReadOnly
+from api.serializers import ShopSerializer, UserSerializer, BookSerializer
 
 User = get_user_model()
 
@@ -42,3 +39,34 @@ class Register(CreateAPIView):
     """Register view for signing up."""
 
     serializer_class = UserSerializer
+
+
+class BooksListView(ListAPIView):
+    """This view is responsible for getting data about all existing books"""
+
+    serializer_class = BookSerializer
+    queryset = Book.objects.all()
+
+
+class BooksForCurrentShopListView(ListCreateAPIView):
+    """This view is responsible for getting data about books of current shop by shop_id received from url endpoint"""
+    serializer_class = BookSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOfShopOrReadOnly]
+
+    def get_queryset(self):
+        """This method allows getting queryset of books of the single shop"""
+        queryset = Book.objects.filter(shop_id=self.kwargs.get("pk"))
+        return queryset
+
+    """This method save the book instance and match it with specified shop"""
+    def perform_create(self, serializer):
+        serializer.save(shop_id=self.kwargs.get("pk"))
+
+
+class BookRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+    """This view is responsible for getting data about single book and realizes functionality of updating/deleting
+    books."""
+
+    serializer_class = BookSerializer
+    queryset = Book.objects.all()
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
